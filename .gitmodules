@@ -13,3 +13,6 @@
 [submodule "packages/plugin-flow-template"]
 	path = packages/plugin-flow-template
 	url = https://github.com/onflow/eliza-plugin-template.git
+[submodule "nftcreate"]
+	path = nftcreate
+	url = https://github.com/alanyoungcy/nftcreate.git
