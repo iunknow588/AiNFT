@@ -75,12 +75,15 @@ Build all packages
 
 ```bash
 pnpm build
-```  
-or 
+```
+
+or
 
 ```bash
 pnpm -r build
-```  
+```
+
+
 
 ## Configure Environment
 

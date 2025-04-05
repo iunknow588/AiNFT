@@ -194,3 +194,10 @@ extra
 administrators2.pkey
 admin.pkey
 admin2025.pkey
+
+# Windows Zone.Identifier files
+*:Zone.Identifier
+*.Zone.Identifier
+
+# Private keys
+*.pkey
