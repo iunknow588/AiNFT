@@ -14,7 +14,7 @@ const Home = () => {
 
       <div className="grid md:grid-cols-2 gap-8 mb-16">
         <Link
-          to="/home/lc/AiNFT/AiNFT/client/src/components/pages/Mint.tsx"
+          to="/mint"
           className="bg-purple-500 hover:bg-purple-600 p-8 rounded-xl transition-all"
         >
           <h2 className="text-2xl font-bold mb-4">Create NFT</h2>

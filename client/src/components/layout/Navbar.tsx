@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import { useWeb3React } from '@web3-react/core';
 import { MetaMask } from '@web3-react/metamask';
-import { Wallet, Home, PlusSquare, Grid, User } from 'lucide-react';
+import { Wallet, Home, PlusSquare, Grid, User, Coins, BookOpen, Layout as LayoutIcon } from 'lucide-react';
 import { useState } from 'react';
 
 const Navbar = () => {
@@ -19,7 +19,6 @@ const Navbar = () => {
       setIsConnecting(true);
       setError('');
 
-      // 检查是否安装了MetaMask
       if (typeof window.ethereum === 'undefined') {
         throw new Error('Please install MetaMask to connect');
       }
@@ -67,38 +66,72 @@ const Navbar = () => {
     <nav className="bg-gray-800/50 backdrop-blur-sm border-b border-gray-700">
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16">
-          <div className="flex items-center">
+          {/* Left section: Logo and primary navigation */}
+          <div className="flex items-center space-x-8">
             <Link to="/" className="flex items-center space-x-2">
-              <Wallet className="h-8 w-8 text-purple-500" />
+              <Coins className="h-8 w-8 text-purple-500" />
               <span className="text-xl font-bold">NFT Platform</span>
             </Link>
+
+            <div className="hidden md:flex items-center space-x-6">
+              <Link to="/" className="flex items-center space-x-1 text-gray-300 hover:text-white transition-colors">
+                <Home className="w-4 h-4" />
+                <span>Home</span>
+              </Link>
+              <Link to="/mint" className="flex items-center space-x-1 text-gray-300 hover:text-white transition-colors">
+                <PlusSquare className="w-4 h-4" />
+                <span>Mint</span>
+              </Link>
+              <Link to="/gallery" className="flex items-center space-x-1 text-gray-300 hover:text-white transition-colors">
+                <Grid className="w-4 h-4" />
+                <span>Gallery</span>
+              </Link>
+              <Link to="/profile" className="flex items-center space-x-1 text-gray-300 hover:text-white transition-colors">
+                <User className="w-4 h-4" />
+                <span>Profile</span>
+              </Link>
+            </div>
           </div>
 
-          <div>
-            {isActive ? (
-              <div className="flex items-center space-x-4">
-                <span className="text-sm text-gray-300">
-                  {account?.slice(0, 6)}...{account?.slice(-4)}
-                </span>
-                <button
-                  onClick={() => connector && connector.deactivate()}
-                  className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg text-sm"
-                >
-                  Disconnect
-                </button>
-              </div>
-            ) : (
-              <div className="flex flex-col items-end">
-                <button
-                  onClick={connectWallet}
-                  disabled={isConnecting}
-                  className="bg-purple-500 hover:bg-purple-600 disabled:bg-gray-500 text-white px-6 py-2 rounded-lg"
-                >
-                  {isConnecting ? 'Connecting...' : 'Connect Wallet'}
-                </button>
-                {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
-              </div>
-            )}
+          {/* Right section: Secondary navigation and wallet */}
+          <div className="flex items-center space-x-6">
+            {/* Secondary navigation */}
+            <div className="hidden md:flex items-center space-x-4">
+              <Link to="/platform" className="text-gray-300 hover:text-white transition-colors">
+                <LayoutIcon className="w-4 h-4" />
+              </Link>
+              <Link to="/docs" className="text-gray-300 hover:text-white transition-colors">
+                <BookOpen className="w-4 h-4" />
+              </Link>
+            </div>
+
+            {/* Wallet connection */}
+            <div>
+              {isActive ? (
+                <div className="flex items-center space-x-4">
+                  <span className="text-sm text-gray-300">
+                    {account?.slice(0, 6)}...{account?.slice(-4)}
+                  </span>
+                  <button
+                    onClick={() => connector?.deactivate?.()}
+                    className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg text-sm transition-colors"
+                  >
+                    Disconnect
+                  </button>
+                </div>
+              ) : (
+                <div className="flex flex-col items-end">
+                  <button
+                    onClick={connectWallet}
+                    disabled={isConnecting}
+                    className="bg-purple-500 hover:bg-purple-600 disabled:bg-gray-500 text-white px-6 py-2 rounded-lg transition-colors"
+                  >
+                    {isConnecting ? 'Connecting...' : 'Connect Wallet'}
+                  </button>
+                  {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </div>

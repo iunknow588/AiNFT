@@ -28,11 +28,7 @@ const router = createBrowserRouter([
       { path: "*", element: <div>404 Not Found</div> }
     ],
   },
-], {
-  future: {
-    v7_relativeSplatPath: true
-  }
-});
+]);
 
 function App() {
   return (
