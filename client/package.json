@@ -1,0 +1,42 @@
+{
+    "name": "crypto-nft-platform",
+    "private": true,
+    "version": "0.0.0",
+    "type": "module",
+    "scripts": {
+        "dev": "vite",
+        "build": "vite build",
+        "preview": "vite preview"
+    },
+    "dependencies": {
+        "@types/crypto-js": "^4.2.1",
+        "@web3-react/core": "^8.2.3",
+        "@web3-react/injected-connector": "^6.0.7",
+        "@web3-react/metamask": "^8.2.4",
+        "buffer": "^6.0.3",
+        "ethers": "5.7.2",
+        "lucide-react": "latest",
+        "process": "^0.11.10",
+        "react": "18.2.0",
+        "react-dom": "18.2.0",
+        "react-router-dom": "^6.21.0",
+        "stream-browserify": "^3.0.0"
+    },
+    "devDependencies": {
+        "@types/node": "^22.14.0",
+        "@types/react": "^18.3.20",
+        "@types/react-dom": "^18.3.6",
+        "@typescript-eslint/eslint-plugin": "^6.14.0",
+        "@typescript-eslint/parser": "^6.14.0",
+        "@vitejs/plugin-react": "^4.3.4",
+        "autoprefixer": "^10.4.x",
+        "eslint": "^8.55.0",
+        "eslint-plugin-react-hooks": "^4.6.0",
+        "eslint-plugin-react-refresh": "^0.4.5",
+        "postcss": "^8.4.x",
+        "tailwindcss": "^3.3.x",
+        "typescript": "^5.6.3",
+        "vite": "^5.4.12",
+        "vite-plugin-node-polyfills": "^0.21.0"
+    }
+}
