@@ -173,12 +173,18 @@ importers:
       '@web3-react/metamask':
         specifier: ^8.2.4
         version: 8.2.4(@types/react@18.3.20)(react@18.2.0)
+      buffer:
+        specifier: ^6.0.3
+        version: 6.0.3
       ethers:
         specifier: 5.7.2
         version: 5.7.2(bufferutil@4.0.9)(utf-8-validate@5.0.10)
       lucide-react:
         specifier: latest
         version: 0.487.0(react@18.2.0)
+      process:
+        specifier: ^0.11.10
+        version: 0.11.10
       react:
         specifier: 18.2.0
         version: 18.2.0
@@ -188,6 +194,9 @@ importers:
       react-router-dom:
         specifier: ^6.30.0
         version: 6.30.0(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+      stream-browserify:
+        specifier: ^3.0.0
+        version: 3.0.0
     devDependencies:
       '@types/react':
         specifier: ^18.2.43
@@ -6538,6 +6547,10 @@ packages:
   process-warning@4.0.1:
     resolution: {integrity: sha512-3c2LzQ3rY9d0hc1emcsHhfT9Jwz0cChib/QN89oME2R451w5fy3f0afAhERFZAwrbDU43wk12d0ORBpDVME50Q==}
 
+  process@0.11.10:
+    resolution: {integrity: sha512-cdGef/drWFoydD1JsMzuFf8100nZl+GT+yacc2bEced5f9Rjk4z+WtFUTBu9PhOi9j/jfmBPu0mMEY4wIdAF8A==}
+    engines: {node: '>= 0.6.0'}
+
   proggy@2.0.0:
     resolution: {integrity: sha512-69agxLtnI8xBs9gUGqEnK26UfiexpHy+KUpBQWabiytQjnn5wFY8rklAi7GRfABIuPNnQ/ik48+LGLkYYJcy4A==}
     engines: {node: ^14.17.0 || ^16.13.0 || >=18.0.0}
@@ -7133,6 +7146,9 @@ packages:
 
   std-env@3.8.1:
     resolution: {integrity: sha512-vj5lIj3Mwf9D79hBkltk5qmkFI+biIKWS2IBxEyEU3AX1tUf7AoL8nSazCOiiqQsGKIq01SClsKEzweu34uwvA==}
+
+  stream-browserify@3.0.0:
+    resolution: {integrity: sha512-H73RAHsVBapbim0tU2JwwOiXUj+fikfiaoYAKHF3VJfA0pe2BCzkhAHBlLG6REzE+2WNZcxOXjK7lkso+9euLA==}
 
   stream-shift@1.0.3:
     resolution: {integrity: sha512-76ORR0DO1o1hlKwTbi/DM3EXWGf3ZJYO8cXX5RJwnul2DEg2oyoZyjLNoQM8WsvZiFKCRfC1O0J7iCvie3RZmQ==}
@@ -16192,6 +16208,8 @@ snapshots:
 
   process-warning@4.0.1: {}
 
+  process@0.11.10: {}
+
   proggy@2.0.0: {}
 
   progress@2.0.3: {}
@@ -16843,6 +16861,11 @@ snapshots:
   std-env@3.8.0: {}
 
   std-env@3.8.1: {}
+
+  stream-browserify@3.0.0:
+    dependencies:
+      inherits: 2.0.4
+      readable-stream: 3.6.2
 
   stream-shift@1.0.3: {}
 
