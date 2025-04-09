@@ -1,65 +1,85 @@
-import { Link } from 'react-router-dom';
-import { useWeb3React } from '@web3-react/core';
-import { MetaMask } from '@web3-react/metamask';
-import { Wallet, Home, PlusSquare, Grid, User, Coins, BookOpen, Layout as LayoutIcon } from 'lucide-react';
-import { useState } from 'react';
+import * as fcl from "@onflow/fcl";
+import { Coins, Home, PlusSquare, Grid, User, LayoutIcon, BookOpen } from "lucide-react";
+import { useState, useEffect } from 'react';
+import { Link } from "react-router-dom";
 
 const Navbar = () => {
-  const { isActive, account, connector } = useWeb3React();
+  const [user, setUser] = useState({ loggedIn: null, addr: null });
   const [isConnecting, setIsConnecting] = useState(false);
   const [error, setError] = useState('');
 
-  const connectWallet = async () => {
-    if (!connector || !(connector instanceof MetaMask)) {
-      setError('Please install MetaMask to connect');
-      return;
-    }
+  useEffect(() => {
+    fcl.currentUser().subscribe(setUser);
+  }, []);
 
+  const connectWallet = async () => {
     try {
       setIsConnecting(true);
       setError('');
 
-      if (typeof window.ethereum === 'undefined') {
-        throw new Error('Please install MetaMask to connect');
-      }
+      const timeoutDuration = parseInt(import.meta.env.VITE_WALLET_CONNECT_TIMEOUT || '30000');
+      console.log(`Attempting to connect with timeout: ${timeoutDuration}ms`);
 
-      await (connector as MetaMask).activate();
+      const timeoutPromise = new Promise((_, reject) => {
+        setTimeout(() => {
+          console.log('Connection timed out after', timeoutDuration, 'ms');
+          reject(new Error('CONNECTION_TIMEOUT'));
+        }, timeoutDuration);
+      });
 
-      const chainId = import.meta.env.VITE_CHAIN_ID || '0x1';
-      try {
-        await window.ethereum.request({
-          method: 'wallet_switchEthereumChain',
-          params: [{ chainId }],
-        });
-      } catch (error: any) {
-        if (error.code === 4902) {
-          try {
-            await window.ethereum.request({
-              method: 'wallet_addEthereumChain',
-              params: [{
-                chainId,
-                chainName: import.meta.env.VITE_NETWORK_NAME || 'Ethereum Mainnet',
-                nativeCurrency: {
-                  name: 'Ether',
-                  symbol: 'ETH',
-                  decimals: 18,
-                },
-                rpcUrls: [import.meta.env.VITE_RPC_URL || 'https://eth-mainnet.g.alchemy.com/v2/your-api-key'],
-                blockExplorerUrls: ['https://etherscan.io/'],
-              }],
-            });
-          } catch (addError) {
-            console.error('Error adding chain:', addError);
-            setError('Failed to add network to MetaMask');
-          }
-        }
-      }
+      console.log('Initiating FCL authentication...');
+      const authPromise = fcl.authenticate();
+
+      // 添加调试信息
+      authPromise.then(
+        (result) => console.log('Authentication successful:', result),
+        (error) => console.log('Authentication failed:', error)
+      );
+
+      // 使用 Promise.race 来处理超时情况
+      await Promise.race([
+        authPromise,
+        timeoutPromise
+      ]);
+
     } catch (error: any) {
-      console.error('Error connecting wallet:', error);
-      setError(error.message || 'Failed to connect wallet');
+      console.error('Connection error details:', {
+        message: error.message,
+        stack: error.stack,
+        type: error.constructor.name
+      });
+
+      const errorMessages: Record<string, string> = {
+        'CONNECTION_TIMEOUT': 'Connection timed out. Please check your network and try again.',
+        'USER_REJECTED': 'Connection rejected by user.',
+        'NETWORK_ERROR': 'Network error. Please check your connection.',
+      };
+
+      let errorMessage = 'Failed to connect wallet';
+
+      if (error.message === 'CONNECTION_TIMEOUT') {
+        errorMessage = errorMessages['CONNECTION_TIMEOUT'];
+      } else if (error.message?.includes('User rejected')) {
+        errorMessage = errorMessages['USER_REJECTED'];
+      } else if (error.message?.includes('Network Error')) {
+        errorMessage = errorMessages['NETWORK_ERROR'];
+      } else if (error.message) {
+        errorMessage = error.message;
+      }
+
+      setError(errorMessage);
+
+      if (error.message?.includes('Network Error')) {
+        console.log('Attempting to clear authentication state due to network error');
+        await fcl.unauthenticate();
+      }
     } finally {
       setIsConnecting(false);
     }
+  };
+
+  const disconnectWallet = () => {
+    fcl.unauthenticate();
   };
 
   return (
@@ -107,13 +127,13 @@ const Navbar = () => {
 
             {/* Wallet connection */}
             <div>
-              {isActive ? (
+              {user?.loggedIn ? (
                 <div className="flex items-center space-x-4">
                   <span className="text-sm text-gray-300">
-                    {account?.slice(0, 6)}...{account?.slice(-4)}
+                    {user.addr && typeof user.addr === 'string' ? `${user.addr.slice(0, 6)}...${user.addr.slice(-4)}` : ''}
                   </span>
                   <button
-                    onClick={() => connector?.deactivate?.()}
+                    onClick={disconnectWallet}
                     className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg text-sm transition-colors"
                   >
                     Disconnect
@@ -124,11 +144,11 @@ const Navbar = () => {
                   <button
                     onClick={connectWallet}
                     disabled={isConnecting}
-                    className="bg-purple-500 hover:bg-purple-600 disabled:bg-gray-500 text-white px-6 py-2 rounded-lg transition-colors"
+                    className="bg-purple-500 hover:bg-purple-600 text-white px-4 py-2 rounded-lg text-sm transition-colors disabled:opacity-50"
                   >
-                    {isConnecting ? 'Connecting...' : 'Connect Wallet'}
+                    {isConnecting ? 'Connecting...' : 'Connect Flow Wallet'}
                   </button>
-                  {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
+                  {error && <span className="text-red-500 text-sm mt-1">{error}</span>}
                 </div>
               )}
             </div>

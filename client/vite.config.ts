@@ -15,6 +15,20 @@ export default defineConfig({
       },
     })
   ],
+  server: {
+    headers: {
+      'Content-Security-Policy': `
+        default-src 'self';
+        script-src 'self' 'unsafe-inline' 'unsafe-eval';
+        style-src 'self' 'unsafe-inline';
+        connect-src 'self' https://* wss://*;
+        img-src 'self' data: https:;
+        font-src 'self';
+        frame-src 'self' https://*.walletconnect.com https://*.walletconnect.org;
+        worker-src 'self' blob:;
+      `.replace(/\s+/g, ' ').trim()
+    }
+  },
   resolve: {
     alias: {
       '@': resolve(__dirname, './src'),

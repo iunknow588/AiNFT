@@ -1,3 +1,4 @@
+import "./lib/config"; // 确保这行在最前面
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { Web3ReactHooks, Web3ReactProvider, initializeConnector } from "@web3-react/core";
 import { MetaMask } from "@web3-react/metamask";
